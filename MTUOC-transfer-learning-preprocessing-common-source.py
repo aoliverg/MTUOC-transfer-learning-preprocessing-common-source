@@ -747,11 +747,11 @@ if TRAIN_SENTENCEPIECE:
         linia=linia.rstrip()
         #if cont in selected_lines:
         #    sortidatemp.write(linia+"\n")
-        
+        sortidatemp.write(linia+"\n")
         cont+=1
         if cont>SAMPLE_SIZE:
             break
-        sortidatemp.write(linia+"\n")
+        
     entradatemp.close()
     sortidatemp.close()
 
@@ -773,10 +773,11 @@ if TRAIN_SENTENCEPIECE:
     cont=0
     for linia in entradatemp:
         linia=linia.rstrip()
+        sortidatemp.write(linia+"\n")
         cont+=1
         if cont>SAMPLE_SIZE:
             break
-        sortidatemp.write(linia+"\n")
+        
     entradatemp.close()
     sortidatemp.close()
 
@@ -798,10 +799,11 @@ if TRAIN_SENTENCEPIECE:
     cont=0
     for linia in entradatemp:
         linia=linia.rstrip()
+        sortidatemp.write(linia+"\n")
         cont+=1
         if cont>SAMPLE_SIZE:
             break
-        sortidatemp.write(linia+"\n")
+        
     entradatemp.close()
     sortidatemp.close()
    
@@ -976,6 +978,9 @@ outfile="valB.sp."+L2code2
 vocabulary_file="vocab_file."+L2code2
 sentencepiece_encode(infile,outfile, SP_MODEL,vocabulary_file,VOCABULARY_THRESHOLD,bosSP,eosSP)
 
+nullweights=codecs.open("nullweights.temp","w",encoding="utf-8")
+nullweights.close()
+
 if GUIDED_ALIGNMENT:
     if VERBOSE:
         cadena="Guided alignment training: "+str(datetime.now())
@@ -993,16 +998,16 @@ if GUIDED_ALIGNMENT:
             cadena="Fast_align: "+str(datetime.now())
             print(cadena)
             logfile.write(cadena+"\n")
-        guided_alignment_fast_align(MTUOC,"trainA.sp","trainA.sp",L1code2,L3code2,False,VERBOSE)
-        guided_alignment_fast_align(MTUOC,"trainB.sp","trainB.sp",L1code2,L2code2,False,VERBOSE)
+        guided_alignment_fast_align(MTUOC,"trainA.sp","trainA.sp","nullweights.temp",L1code2,L3code2,False,VERBOSE)
+        guided_alignment_fast_align(MTUOC,"trainB.sp","trainB.sp","nullweights.temp",L1code2,L2code2,False,VERBOSE)
         
     elif ALIGNER=="eflomal":
         if VERBOSE:
             cadena="Eflomal: "+str(datetime.now())
             print(cadena)
             logfile.write(cadena+"\n")
-        guided_alignment_eflomal(MTUOC,"trainA.sp","trainA.sp",L1code2,L3code2,SPLIT_LIMIT,VERBOSE)
-        guided_alignment_eflomal(MTUOC,"trainB.sp","trainB.sp",L1code2,L2code2,SPLIT_LIMIT,VERBOSE)
+        guided_alignment_eflomal(MTUOC,"trainA.sp","trainA.sp","nullweights.temp",L1code2,L3code2,SPLIT_LIMIT,VERBOSE)
+        guided_alignment_eflomal(MTUOC,"trainB.sp","trainB.sp","nullweights.temp",L1code2,L2code2,SPLIT_LIMIT,VERBOSE)
  
 if GUIDED_ALIGNMENT_VALID:
     if VERBOSE:
@@ -1021,16 +1026,16 @@ if GUIDED_ALIGNMENT_VALID:
             cadena="Fast_align: "+str(datetime.now())
             print(cadena)
             logfile.write(cadena+"\n")
-        guided_alignment_fast_align(MTUOC,"valA.sp","valA.sp",L1code2,L3code2,False,VERBOSE)
-        guided_alignment_fast_align(MTUOC,"valB.sp","valB.sp",L1code2,L2code2,False,VERBOSE)
+        guided_alignment_fast_align(MTUOC,"valA.sp","valA.sp","nullweights.temp",L1code2,L3code2,False,VERBOSE)
+        guided_alignment_fast_align(MTUOC,"valB.sp","valB.sp","nullweights.temp",L1code2,L2code2,False,VERBOSE)
         
     elif ALIGNER=="eflomal":
         if VERBOSE:
             cadena="Eflomal: "+str(datetime.now())
             print(cadena)
             logfile.write(cadena+"\n")
-        guided_alignment_eflomal(MTUOC,"valA.sp","valA.sp",L1code2,L3code2,SPLIT_LIMIT,VERBOSE)
-        guided_alignment_eflomal(MTUOC,"valB.sp","valB.sp",L1code2,L2code2,SPLIT_LIMIT,VERBOSE)
+        guided_alignment_eflomal(MTUOC,"valA.sp","valA.sp","nullweights.temp",L1code2,L3code2,SPLIT_LIMIT,VERBOSE)
+        guided_alignment_eflomal(MTUOC,"valB.sp","valB.sp","nullweights.temp",L1code2,L2code2,SPLIT_LIMIT,VERBOSE)
 if VERBOSE:
     cadena="End of process: "+str(datetime.now())
     print(cadena)
